@@ -1,3 +1,5 @@
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -32,6 +34,16 @@ class ChatViewModelTest {
     @Test
     fun `send message should update messages with MyMessage`() = runTest {
         val message = Message.MyMessage("TestMessage")
+        val expectedMessage = Message.MyMessage(message.text)
+
+        viewModel.sendMyMessage(message.text)
+
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val actualMessages = viewModel.messages.value.messages
+
+        assertTrue(actualMessages.contains(expectedMessage))
+        assertEquals(1, actualMessages.size)
 
     }
 
